@@ -5,7 +5,6 @@ const {
   Consumer: BookstoreServiceConsumer
 } = React.createContext();
 
-
 export {
   BookstoreServiceProvider,
   BookstoreServiceConsumer

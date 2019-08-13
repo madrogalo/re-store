@@ -3,7 +3,6 @@ import {
   BookstoreServiceConsumer
 } from './bookstore-service-context';
 
-
 export {
   BookstoreServiceProvider,
   BookstoreServiceConsumer
