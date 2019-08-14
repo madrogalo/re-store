@@ -6,6 +6,8 @@ import './book-list.css';
 class BookList extends Component {
   render() {
     const { books } = this.props;
+    console.log(books);
+    
     return (
       <ul>
       { books.map((book) => {
