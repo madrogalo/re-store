@@ -4,13 +4,30 @@ import Spinner from '../spinner';
 import { connect } from 'react-redux';
 import { withBookstoreService } from '../hoc';
 import ErrorIndicator from '../error-indicator';
-import { fetchBooks } from '../../actions';
+import { fetchBooks, bookAddedToCart } from '../../actions';
 import { compose } from '../../utils';
+
 
 import './book-list.css';
 
-
-class BookList extends Component {
+const BookList = ({ books, onAddedToCart }) => {
+  return (
+   <ul className="book-list">
+     {books.map((book) => {
+         return(
+           <li  key={book.id}>
+             <BookListItem 
+              book={book} 
+              onAddedToCart={() => onAddedToCart(book.id)}
+             />
+           </li>
+         )
+       })
+     }
+   </ul>
+  );
+ }
+class BookListContainer extends Component {
 
   componentDidMount() {
     this.props.fetchBooks();
@@ -18,7 +35,7 @@ class BookList extends Component {
 
 
   render() {
-    const { books, loading, error } = this.props;
+    const { books, loading, error, onAddedToCart } = this.props;
     if (loading) {
       return <Spinner />
     }
@@ -27,20 +44,12 @@ class BookList extends Component {
       return <ErrorIndicator />
     }
     return (
-
-        <ul>
-          {books.map((book) => {
-            return(
-              <li className="book-list" key={book.id}>
-                <BookListItem book={book} />
-              </li>
-            )
-          })
-         }
-        </ul>
+       <BookList books={books} onAddedToCart={onAddedToCart}/>
       )
     }
 };
+
+
 
 const mapStateToProps = ({books, loading, error}) => {
   return { books, loading, error };
@@ -48,11 +57,12 @@ const mapStateToProps = ({books, loading, error}) => {
 
 const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   return {
-   fetchBooks: fetchBooks(bookstoreService, dispatch)
+   fetchBooks: fetchBooks(bookstoreService, dispatch),
+   onAddedToCart: (id) => dispatch(bookAddedToCart(id))
   };
 };
 
 export default compose(
   withBookstoreService(),
   connect(mapStateToProps, mapDispatchToProps)
-)(BookList);
+)(BookListContainer);
